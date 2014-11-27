@@ -91,9 +91,9 @@
 
 			// Boolean - whether or not the chart should be responsive and resize when the browser does.
 			responsive: false,
-
-                        // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-                        maintainAspectRatio: true,
+			
+			// Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+			maintainAspectRatio: true,
 
 			// Boolean - Determines whether to draw tooltips on the canvas or not - attaches events to touchmove & mousemove
 			showTooltips: true,
@@ -1523,6 +1523,8 @@
 					this.xLabelWidth = cosRotation * originalLabelWidth;
 
 				}
+				
+				
 				if (this.xLabelRotation > 0){
 					this.endPoint -= Math.sin(toRadians(this.xLabelRotation))*originalLabelWidth + 3;
 				}
@@ -1532,7 +1534,6 @@
 				this.xScalePaddingRight = this.padding;
 				this.xScalePaddingLeft = this.padding;
 			}
-
 		},
 		// Needs to be overidden in each Chart type
 		// Otherwise we need to pass all the data into the scale class
@@ -1612,11 +1613,8 @@
 						isRotated = (this.xLabelRotation > 0),
 						labelStr = label;
 					
-					if (typeof label == 'object' && typeof label.label != 'undefined') {
+					if (typeof label == 'object' && typeof label.label != 'undefined')
 						labelStr = label.label;
-						//isRotated = false;
-						//this.xLabelRotation = 0;
-					}
 
 					ctx.beginPath();
 
