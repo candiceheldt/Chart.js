@@ -1479,16 +1479,26 @@
 
 			var firstWidth = this.ctx.measureText(this.xLabels[0]).width,
 				lastWidth = this.ctx.measureText(this.xLabels[this.xLabels.length - 1]).width,
+				xLabels = this.xLabels,
 				firstRotated,
 				lastRotated;
-
+			
+			if (typeof this.xLabels[0] == 'object' && this.xLabels[0].label !== 'undefined' && typeof this.xLabels[this.xLabels.length - 1] == 'object' && this.xLabels[this.xLabels.length - 1].label !== 'undefined') {
+				firstWidth = this.ctx.measureText(this.xLabels[0].label).width;
+				lastWidth = this.ctx.measureText(this.xLabels[this.xLabels.length - 1].label).width;
+				
+				xLabels = [];
+				for (var i = 0; i < this.xLabels.length; i++) {
+					xLabels.push(this.xLabels[i].label);
+				}
+			}
 
 			this.xScalePaddingRight = lastWidth/2 + 3;
 			this.xScalePaddingLeft = (firstWidth/2 > this.yLabelWidth + 10) ? firstWidth/2 : this.yLabelWidth + 10;
 
 			this.xLabelRotation = 0;
 			if (this.display){
-				var originalLabelWidth = longestText(this.ctx,this.font,this.xLabels),
+				var originalLabelWidth = longestText(this.ctx,this.font,xLabels),
 					cosRotation,
 					firstRotatedWidth;
 				this.xLabelWidth = originalLabelWidth;
@@ -1599,7 +1609,14 @@
 					var xPos = this.calculateX(index) + aliasPixel(this.lineWidth),
 						// Check to see if line/bar here and decide where to place the line
 						linePos = this.calculateX(index - (this.offsetGridLines ? 0.5 : 0)) + aliasPixel(this.lineWidth),
-						isRotated = (this.xLabelRotation > 0);
+						isRotated = (this.xLabelRotation > 0),
+						labelStr = label;
+					
+					if (typeof label == 'object' && typeof label.label != 'undefined') {
+						labelStr = label.label;
+						//isRotated = false;
+						//this.xLabelRotation = 0;
+					}
 
 					ctx.beginPath();
 
@@ -1616,8 +1633,6 @@
 					ctx.lineTo(linePos,this.startPoint - 3);
 					ctx.stroke();
 					ctx.closePath();
-
-
 					ctx.lineWidth = this.lineWidth;
 					ctx.strokeStyle = this.lineColor;
 
@@ -1635,7 +1650,7 @@
 					ctx.font = this.font;
 					ctx.textAlign = (isRotated) ? "right" : "center";
 					ctx.textBaseline = (isRotated) ? "middle" : "top";
-					ctx.fillText(label, 0, 0);
+					ctx.fillText(labelStr, 0, 0);
 					ctx.restore();
 				},this);
 
@@ -3371,9 +3386,5 @@
 		}
 
 	});
-
-
-
-
 
 }).call(this);
